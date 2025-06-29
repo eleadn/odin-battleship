@@ -7,7 +7,7 @@ import { defineConfig } from "eslint/config";
 
 export default defineConfig([
     {
-    files: ['**/*.js'],
+    files: ['src/*.js'],
     languageOptions: {
       globals: {
         ...globals.jest,

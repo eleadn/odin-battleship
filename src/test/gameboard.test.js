@@ -44,4 +44,46 @@ describe("Gameboard tests", () => {
 			expect(gameboard.totalShips).toBe(1);
 		});
 	});
+
+	describe("receiveAttack tests", () => {
+		it("Missing a shot", () => {
+			const gameboard = new Gameboard();
+			expect(gameboard.totalAttacksCount).toBe(0);
+			expect(gameboard.missedAttacks.length).toBe(0);
+			gameboard.receiveAttack(0, 0);
+			expect(gameboard.totalAttacksCount).toBe(1);
+			expect(gameboard.missedAttacks.length).toBe(1);
+		});
+
+		it("Shooting a ship", () => {
+			const gameboard = new Gameboard();
+			gameboard.addShip(0, 0, SHIP.SUBMARINE, SHIP_DIRECTION.SIDE);
+			expect(gameboard.totalAttacksCount).toBe(0);
+			expect(gameboard.missedAttacks.length).toBe(0);
+			gameboard.receiveAttack(0, 0);
+			expect(gameboard.totalAttacksCount).toBe(1);
+			expect(gameboard.missedAttacks.length).toBe(0);
+		});
+
+		it("Shooting out of range", () => {
+			const gameboard = new Gameboard();
+			expect(gameboard.totalAttacksCount).toBe(0);
+			expect(gameboard.missedAttacks.length).toBe(0);
+			gameboard.receiveAttack(-1, 0);
+			expect(gameboard.totalAttacksCount).toBe(0);
+			expect(gameboard.missedAttacks.length).toBe(0);
+		});
+
+		it("Shooting twice at the same place", () => {
+			const gameboard = new Gameboard();
+			expect(gameboard.totalAttacksCount).toBe(0);
+			expect(gameboard.missedAttacks.length).toBe(0);
+			gameboard.receiveAttack(0, 0);
+			expect(gameboard.totalAttacksCount).toBe(1);
+			expect(gameboard.missedAttacks.length).toBe(1);
+			gameboard.receiveAttack(0, 0);
+			expect(gameboard.totalAttacksCount).toBe(1);
+			expect(gameboard.missedAttacks.length).toBe(1);
+		});
+	});
 });

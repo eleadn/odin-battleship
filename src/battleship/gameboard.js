@@ -3,13 +3,23 @@ import Ship from "./ship";
 
 export default class Gameboard {
 	#ships;
+	#attacks;
 
 	constructor() {
 		this.#ships = [];
+		this.#attacks = [];
 	}
 
 	get totalShips() {
 		return this.#ships.length;
+	}
+
+	get totalAttacksCount() {
+		return this.#attacks.length;
+	}
+
+	get missedAttacks() {
+		return this.#attacks.filter((a) => !a.hit);
 	}
 
 	addShip(positionX, positionY, shipLength, direction) {
@@ -30,6 +40,45 @@ export default class Gameboard {
 		} else if (this.#isPositionInsideBoard(position.x + shipLength)) {
 			this.#addShip(position, shipLength, direction);
 		}
+	}
+
+	receiveAttack(positionX, positionY) {
+		const position = { x: positionX, y: positionY };
+		if (
+			position.x < 0 ||
+			position.x >= BOARD_SIZE ||
+			position.y < 0 ||
+			position.y >= BOARD_SIZE ||
+			this.#attacks.some(
+				(a) =>
+					a.position.x === position.x && a.position.y === position.y
+			)
+		) {
+			return;
+		}
+
+		const isHit = this.#ships.some((s) => this.#testShipHit(s, position));
+		this.#attacks.push({ position: position, hit: isHit });
+	}
+
+	#testShipHit(ship, hitPosition) {
+		const isShipVertical = ship.direction === SHIP_DIRECTION.UP;
+		const shipAxis = isShipVertical ? ship.position.x : ship.position.y;
+		const shipSegment = isShipVertical ? ship.position.y : ship.position.x;
+		const shipSegmentEnd = shipSegment + ship.length;
+		const hitAxis = isShipVertical ? hitPosition.x : hitPosition.y;
+		const hitSegment = isShipVertical ? hitPosition.y : hitPosition.x;
+
+		if (
+			shipAxis === hitAxis &&
+			shipSegment <= hitSegment &&
+			hitSegment <= shipSegmentEnd
+		) {
+			ship.hit();
+			return true;
+		}
+
+		return false;
 	}
 
 	#isPositionInsideBoard(position) {

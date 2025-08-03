@@ -22,6 +22,10 @@ export default class Gameboard {
 		return this.#attacks.filter((a) => !a.hit);
 	}
 
+	get areAllShipSunk() {
+		return this.#ships.length === 0 || this.#ships.every((s) => s.isSunk());
+	}
+
 	addShip(positionX, positionY, shipLength, direction) {
 		const position = { x: positionX, y: positionY };
 

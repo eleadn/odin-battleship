@@ -86,4 +86,53 @@ describe("Gameboard tests", () => {
 			expect(gameboard.missedAttacks.length).toBe(1);
 		});
 	});
+
+	describe("areAllShipSunk tests", () => {
+		it("No ships", () => {
+			const gameboard = new Gameboard();
+			expect(gameboard.areAllShipSunk).toBeTruthy();
+		});
+
+		it("Not sunk ship", () => {
+			const gameboard = new Gameboard();
+			gameboard.addShip(0, 0, SHIP.SUBMARINE, SHIP_DIRECTION.SIDE);
+			expect(gameboard.areAllShipSunk).toBeFalsy();
+		});
+
+		it("Single sunk ship", () => {
+			const gameboard = new Gameboard();
+			gameboard.addShip(0, 0, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
+			expect(gameboard.areAllShipSunk).toBeFalsy();
+			gameboard.receiveAttack(0, 0);
+			expect(gameboard.areAllShipSunk).toBeFalsy();
+			gameboard.receiveAttack(1, 0);
+			expect(gameboard.areAllShipSunk).toBeTruthy();
+		});
+
+		it("Two ships, one sunk", () => {
+			const gameboard = new Gameboard();
+			gameboard.addShip(0, 0, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
+			gameboard.addShip(0, 2, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
+			expect(gameboard.areAllShipSunk).toBeFalsy();
+			gameboard.receiveAttack(0, 0);
+			expect(gameboard.areAllShipSunk).toBeFalsy();
+			gameboard.receiveAttack(1, 0);
+			expect(gameboard.areAllShipSunk).toBeFalsy();
+		});
+
+		it("Two ships, all sunk", () => {
+			const gameboard = new Gameboard();
+			gameboard.addShip(0, 0, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
+			gameboard.addShip(0, 2, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
+			expect(gameboard.areAllShipSunk).toBeFalsy();
+			gameboard.receiveAttack(0, 0);
+			expect(gameboard.areAllShipSunk).toBeFalsy();
+			gameboard.receiveAttack(1, 0);
+			expect(gameboard.areAllShipSunk).toBeFalsy();
+			gameboard.receiveAttack(0, 2);
+			expect(gameboard.areAllShipSunk).toBeFalsy();
+			gameboard.receiveAttack(1, 2);
+			expect(gameboard.areAllShipSunk).toBeTruthy();
+		});
+	});
 });

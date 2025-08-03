@@ -72,7 +72,11 @@ export default class Gameboard {
 		const verticalMax = Math.max(verticalUp, verticalDown);
 		const verticalDistance = Math.max(0, verticalMax);
 
-		return horizontalDistance + verticalDistance <= 2;
+		if (horizontalDistance > 0 && verticalDistance > 0) {
+			return horizontalDistance + verticalDistance <= 2;
+		} else {
+			return horizontalDistance + verticalDistance <= 1;
+		}
 	}
 
 	#isNearOrIntersectingSameDirection(ship1, ship2) {
@@ -90,6 +94,10 @@ export default class Gameboard {
 		const shipSegmentEndMin = Math.min(ship1SegmentEnd, ship2SegmentEnd);
 		const segmentDistance = Math.max(0, shipSegmentMax - shipSegmentEndMin);
 
-		return axisDistance + segmentDistance <= 2;
+		if (axisDistance > 0 && segmentDistance > 0) {
+			return axisDistance + segmentDistance <= 2;
+		} else {
+			return axisDistance + segmentDistance <= 1;
+		}
 	}
 }

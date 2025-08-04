@@ -1,5 +1,5 @@
-import { SHIP, SHIP_DIRECTION } from "../battleship/battleship-constants";
-import Ship from "../battleship/ship";
+import { SHIP, SHIP_DIRECTION } from "../battleship-constants";
+import Ship from "../ship";
 
 describe("Ship tests", () => {
 	it("Should increment when hit is called", () => {

@@ -1,7 +1,10 @@
+import GameflowController from "./controllers/gameflow-controller";
+import ScreenManager from "./screen-manager/screen-manager";
 import "./style.css";
-import HomeView from "./views/home-view";
 
 const root = document.getElementById("root");
 
-const homeView = new HomeView(root);
-homeView.render();
+new GameflowController();
+
+ScreenManager.init(root);
+ScreenManager.navigateToHome();

@@ -1,6 +1,5 @@
 import EventBus from "../event-bus/event-bus";
 import ScreenManager from "../screen-manager/screen-manager";
-import { GAMESTATE, state } from "../state/state";
 
 export default class GameflowController {
 	constructor() {
@@ -8,7 +7,6 @@ export default class GameflowController {
 	}
 
 	onHomePlayButtonClick() {
-		state.gameState = GAMESTATE.INIT;
 		ScreenManager.navigateToGameboard();
 	}
 }

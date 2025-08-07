@@ -1,0 +1,49 @@
+* {
+	margin: 0;
+}
+
+.gameboard {
+	height: 100vh;
+	display: flex;
+
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+}
+
+.board {
+	display: grid;
+
+	grid-template-columns: repeat(10, 30px);
+	grid-template-rows: repeat(10, 30px);
+}
+
+.board > .cell-oponent {
+	border-top: none;
+	border-bottom: 1px solid red;
+	border-left: none;
+	border-right: 1px solid red;
+	background-color: white;
+}
+
+.board > .cell-oponent.cell-top {
+	border-top: 1px solid red;
+}
+
+.board > .cell-oponent.cell-left {
+	border-left: 1px solid red;
+}
+
+.board > .cell-friendly {
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+}
+
+.board > .cell-friendly.cell-top {
+	border-top: 1px solid black;
+}
+
+.board > .cell-friendly.cell-left {
+	border-left: 1px solid black;
+}

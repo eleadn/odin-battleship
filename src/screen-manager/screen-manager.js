@@ -1,3 +1,5 @@
+import { configuration } from "../configuration/configuration";
+import GameboardView from "../views/gameboard-view";
 import HomeView from "../views/home-view";
 
 export default class ScreenManager {
@@ -10,6 +12,14 @@ export default class ScreenManager {
 
 	static navigateToHome() {
 		this.#currentView = new HomeView(this.#rootElement);
+		this.#currentView.render();
+	}
+
+	static navigateToGameboard() {
+		this.#currentView = new GameboardView(
+			this.#rootElement,
+			configuration.getBoardSize()
+		);
 		this.#currentView.render();
 	}
 }

@@ -1,3 +1,4 @@
+import { BOARD_SIZE } from "../logic/battleship-constants";
 import Gameboard from "../logic/gameboard";
 
 export const GAMESTATE = {

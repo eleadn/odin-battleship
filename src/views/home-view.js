@@ -13,7 +13,7 @@ export default class HomeView extends ViewBase {
 
 	renderContent() {
 		const container = document.createElement("div");
-		container.classList.add("homeView");
+		container.id = "homeView";
 
 		const screenTitle = document.createElement("h1");
 		screenTitle.textContent = "Battleship";

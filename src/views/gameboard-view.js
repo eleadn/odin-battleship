@@ -62,7 +62,7 @@ export default class GameboardView extends ViewBase {
 
 	renderContent() {
 		const container = document.createElement("div");
-		container.classList.add("gameboard");
+		container.id = "gameboardView";
 
 		this.#renderTitle(container);
 		this.#renderOpponentBoard(container);

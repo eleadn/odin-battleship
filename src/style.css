@@ -2,7 +2,8 @@
 	margin: 0;
 }
 
-.gameboard {
+#homeView,
+#gameboardView {
 	height: 100vh;
 	display: flex;
 

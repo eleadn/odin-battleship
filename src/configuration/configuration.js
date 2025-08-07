@@ -9,7 +9,7 @@ export const configuration = (() => {
 	};
 
 	const getBoardSize = () => boardSize;
-	const getShips = () => new Object(...ships);
+	const getShips = () => new Object({ ...ships });
 
 	return { getBoardSize, getShips };
 })();

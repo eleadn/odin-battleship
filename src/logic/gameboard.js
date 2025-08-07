@@ -1,4 +1,4 @@
-import { BOARD_SIZE, SHIP_DIRECTION } from "../battleship/battleship-constants";
+import { BOARD_SIZE, SHIP_DIRECTION } from "./battleship-constants";
 import Ship from "./ship";
 
 export default class Gameboard {

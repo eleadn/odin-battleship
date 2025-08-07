@@ -1,5 +1,5 @@
-import { SHIP, SHIP_DIRECTION } from "../battleship/battleship-constants";
-import Gameboard from "../battleship/gameboard";
+import { SHIP, SHIP_DIRECTION } from "../battleship-constants";
+import Gameboard from "../gameboard";
 
 describe("Gameboard tests", () => {
 	describe("addShip tests", () => {

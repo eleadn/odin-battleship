@@ -1,13 +1,15 @@
-import { BOARD_SIZE, SHIP_DIRECTION } from "./battleship-constants";
+import { SHIP_DIRECTION } from "./battleship-constants";
 import Ship from "./ship";
 
 export default class Gameboard {
 	#ships;
 	#attacks;
+	#boardSize;
 
-	constructor() {
+	constructor(boardSize) {
 		this.#ships = [];
 		this.#attacks = [];
+		this.#boardSize = boardSize;
 	}
 
 	get totalShips() {
@@ -50,9 +52,9 @@ export default class Gameboard {
 		const position = { x: positionX, y: positionY };
 		if (
 			position.x < 0 ||
-			position.x >= BOARD_SIZE ||
+			position.x >= this.#boardSize ||
 			position.y < 0 ||
-			position.y >= BOARD_SIZE ||
+			position.y >= this.#boardSize ||
 			this.#attacks.some(
 				(a) =>
 					a.position.x === position.x && a.position.y === position.y
@@ -86,7 +88,7 @@ export default class Gameboard {
 	}
 
 	#isPositionInsideBoard(position) {
-		return position >= 0 && position < BOARD_SIZE;
+		return position >= 0 && position < this.#boardSize;
 	}
 
 	#addShip(position, shipLength, direction) {

@@ -1,53 +1,53 @@
-import { SHIP, SHIP_DIRECTION } from "../battleship-constants";
+import { SHIP_DIRECTION } from "../battleship-constants";
 import Gameboard from "../gameboard";
 
 describe("Gameboard tests", () => {
 	describe("addShip tests", () => {
 		it("Adding a single ship", () => {
-			const gameboard = new Gameboard();
+			const gameboard = new Gameboard(10);
 			expect(gameboard.totalShips).toBe(0);
-			gameboard.addShip(0, 0, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
+			gameboard.addShip(0, 0, 2, SHIP_DIRECTION.SIDE);
 			expect(gameboard.totalShips).toBe(1);
 		});
 
 		it("Adding two ships", () => {
-			const gameboard = new Gameboard();
+			const gameboard = new Gameboard(10);
 			expect(gameboard.totalShips).toBe(0);
-			gameboard.addShip(0, 0, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
+			gameboard.addShip(0, 0, 2, SHIP_DIRECTION.SIDE);
 			expect(gameboard.totalShips).toBe(1);
-			gameboard.addShip(4, 1, SHIP.SUBMARINE, SHIP_DIRECTION.SIDE);
+			gameboard.addShip(4, 1, 3, SHIP_DIRECTION.SIDE);
 			expect(gameboard.totalShips).toBe(2);
 		});
 
 		it("Adding a ship at wrong position", () => {
-			const gameboard = new Gameboard();
+			const gameboard = new Gameboard(10);
 			expect(gameboard.totalShips).toBe(0);
-			gameboard.addShip(10, 0, SHIP.BATTLESHIP, SHIP_DIRECTION.SIDE);
+			gameboard.addShip(10, 0, 4, SHIP_DIRECTION.SIDE);
 			expect(gameboard.totalShips).toBe(0);
 		});
 
 		it("Adding a ship on top or crossing another", () => {
-			const gameboard = new Gameboard();
+			const gameboard = new Gameboard(10);
 			expect(gameboard.totalShips).toBe(0);
-			gameboard.addShip(5, 3, SHIP.DESTROYER, SHIP_DIRECTION.UP);
+			gameboard.addShip(5, 3, 3, SHIP_DIRECTION.UP);
 			expect(gameboard.totalShips).toBe(1);
-			gameboard.addShip(3, 4, SHIP.SUBMARINE, SHIP_DIRECTION.SIDE);
+			gameboard.addShip(3, 4, 3, SHIP_DIRECTION.SIDE);
 			expect(gameboard.totalShips).toBe(1);
 		});
 
 		it("Adding a ship next to another", () => {
-			const gameboard = new Gameboard();
+			const gameboard = new Gameboard(10);
 			expect(gameboard.totalShips).toBe(0);
-			gameboard.addShip(0, 0, SHIP.DESTROYER, SHIP_DIRECTION.UP);
+			gameboard.addShip(0, 0, 3, SHIP_DIRECTION.UP);
 			expect(gameboard.totalShips).toBe(1);
-			gameboard.addShip(1, 0, SHIP.SUBMARINE, SHIP_DIRECTION.UP);
+			gameboard.addShip(1, 0, 3, SHIP_DIRECTION.UP);
 			expect(gameboard.totalShips).toBe(1);
 		});
 	});
 
 	describe("receiveAttack tests", () => {
 		it("Missing a shot", () => {
-			const gameboard = new Gameboard();
+			const gameboard = new Gameboard(10);
 			expect(gameboard.totalAttacksCount).toBe(0);
 			expect(gameboard.missedAttacks.length).toBe(0);
 			gameboard.receiveAttack(0, 0);
@@ -56,8 +56,8 @@ describe("Gameboard tests", () => {
 		});
 
 		it("Shooting a ship", () => {
-			const gameboard = new Gameboard();
-			gameboard.addShip(0, 0, SHIP.SUBMARINE, SHIP_DIRECTION.SIDE);
+			const gameboard = new Gameboard(10);
+			gameboard.addShip(0, 0, 3, SHIP_DIRECTION.SIDE);
 			expect(gameboard.totalAttacksCount).toBe(0);
 			expect(gameboard.missedAttacks.length).toBe(0);
 			gameboard.receiveAttack(0, 0);
@@ -66,7 +66,7 @@ describe("Gameboard tests", () => {
 		});
 
 		it("Shooting out of range", () => {
-			const gameboard = new Gameboard();
+			const gameboard = new Gameboard(10);
 			expect(gameboard.totalAttacksCount).toBe(0);
 			expect(gameboard.missedAttacks.length).toBe(0);
 			gameboard.receiveAttack(-1, 0);
@@ -75,7 +75,7 @@ describe("Gameboard tests", () => {
 		});
 
 		it("Shooting twice at the same place", () => {
-			const gameboard = new Gameboard();
+			const gameboard = new Gameboard(10);
 			expect(gameboard.totalAttacksCount).toBe(0);
 			expect(gameboard.missedAttacks.length).toBe(0);
 			gameboard.receiveAttack(0, 0);
@@ -89,19 +89,19 @@ describe("Gameboard tests", () => {
 
 	describe("areAllShipSunk tests", () => {
 		it("No ships", () => {
-			const gameboard = new Gameboard();
+			const gameboard = new Gameboard(10);
 			expect(gameboard.areAllShipSunk).toBeTruthy();
 		});
 
 		it("Not sunk ship", () => {
-			const gameboard = new Gameboard();
-			gameboard.addShip(0, 0, SHIP.SUBMARINE, SHIP_DIRECTION.SIDE);
+			const gameboard = new Gameboard(10);
+			gameboard.addShip(0, 0, 3, SHIP_DIRECTION.SIDE);
 			expect(gameboard.areAllShipSunk).toBeFalsy();
 		});
 
 		it("Single sunk ship", () => {
-			const gameboard = new Gameboard();
-			gameboard.addShip(0, 0, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
+			const gameboard = new Gameboard(10);
+			gameboard.addShip(0, 0, 2, SHIP_DIRECTION.SIDE);
 			expect(gameboard.areAllShipSunk).toBeFalsy();
 			gameboard.receiveAttack(0, 0);
 			expect(gameboard.areAllShipSunk).toBeFalsy();
@@ -110,9 +110,9 @@ describe("Gameboard tests", () => {
 		});
 
 		it("Two ships, one sunk", () => {
-			const gameboard = new Gameboard();
-			gameboard.addShip(0, 0, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
-			gameboard.addShip(0, 2, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
+			const gameboard = new Gameboard(10);
+			gameboard.addShip(0, 0, 2, SHIP_DIRECTION.SIDE);
+			gameboard.addShip(0, 2, 2, SHIP_DIRECTION.SIDE);
 			expect(gameboard.areAllShipSunk).toBeFalsy();
 			gameboard.receiveAttack(0, 0);
 			expect(gameboard.areAllShipSunk).toBeFalsy();
@@ -121,9 +121,9 @@ describe("Gameboard tests", () => {
 		});
 
 		it("Two ships, all sunk", () => {
-			const gameboard = new Gameboard();
-			gameboard.addShip(0, 0, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
-			gameboard.addShip(0, 2, SHIP.PATROL_BOAT, SHIP_DIRECTION.SIDE);
+			const gameboard = new Gameboard(10);
+			gameboard.addShip(0, 0, 2, SHIP_DIRECTION.SIDE);
+			gameboard.addShip(0, 2, 2, SHIP_DIRECTION.SIDE);
 			expect(gameboard.areAllShipSunk).toBeFalsy();
 			gameboard.receiveAttack(0, 0);
 			expect(gameboard.areAllShipSunk).toBeFalsy();

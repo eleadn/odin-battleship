@@ -8,7 +8,7 @@ export default class HomeView extends ViewBase {
 	}
 
 	#onPlayButtonClick() {
-		EventBus.emit("home:playButtonClick");
+		EventBus.emit("game:startRequest");
 	}
 
 	renderContent() {

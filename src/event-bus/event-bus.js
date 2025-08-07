@@ -25,4 +25,16 @@ export default class EventBus {
 			}
 		}
 	}
+
+	static query(signal, ...args) {
+		const events = this.#listeners.get(signal);
+		if (events?.length > 0) {
+			if (events?.length > 1) {
+				console.warn(
+					`EventBus.query(${signal}) called but multiple handlers are registered.`
+				);
+			}
+			return events[0](...args);
+		}
+	}
 }

@@ -32,7 +32,7 @@
 	border-top: 1px solid red;
 }
 
-.board > .cell-oponent.cell-left {
+.board > .cell-opponent.cell-left {
 	border-left: 1px solid red;
 }
 

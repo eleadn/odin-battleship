@@ -30,7 +30,7 @@ export default class GameboardView extends ViewBase {
 		for (let i = 0; i < this.#boardSize; ++i) {
 			for (let j = 0; j < this.#boardSize; ++j) {
 				const cell = document.createElement("button");
-				cell.classList.add("cell-oponent");
+				cell.classList.add("cell-opponent");
 				if (j === 0) {
 					cell.classList.add("cell-left");
 				}

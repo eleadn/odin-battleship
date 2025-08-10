@@ -92,10 +92,16 @@ export default class GameboardView extends ViewBase {
 			const x = ship.isUp ? axis : i;
 			const y = ship.isUp ? i : axis;
 			const index = x + y * this.#boardSize;
+			const shipElem = this.#board.children[index];
+
 			const isHit = ship.hitIndexes.some(
 				(ind) => ind === i - segmentStart
 			);
-			this.#board.children[index].textContent = isHit ? "X" : "O";
+			if (isHit) {
+				shipElem.classList.add("ship-hit");
+			} else {
+				shipElem.classList.add("ship");
+			}
 		}
 	}
 

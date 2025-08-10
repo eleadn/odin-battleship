@@ -48,3 +48,13 @@
 .board > .cell-friendly.cell-left {
 	border-left: 1px solid black;
 }
+
+.board > .cell-friendly.ship {
+	background-color: aqua;
+	border-color: blue;
+}
+
+.board > .cell-friendly.ship-hit {
+	background-color: indianred;
+	border-color: darkred;
+}

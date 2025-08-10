@@ -2,13 +2,13 @@ export default class Ship {
 	#length;
 	#hits;
 	#position;
-	#direction;
+	#isUp;
 
-	constructor(position, length, direction) {
+	constructor(position, length, isUp) {
 		this.#length = length;
 		this.#hits = 0;
 		this.#position = position;
-		this.#direction = direction;
+		this.#isUp = isUp;
 	}
 
 	get length() {
@@ -23,8 +23,8 @@ export default class Ship {
 		return this.#position;
 	}
 
-	get direction() {
-		return this.#direction;
+	get isUp() {
+		return this.#isUp;
 	}
 
 	hit() {

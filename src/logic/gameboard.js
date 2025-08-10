@@ -1,4 +1,3 @@
-import { SHIP_DIRECTION } from "./battleship-constants";
 import Ship from "./ship";
 
 export default class Gameboard {
@@ -32,7 +31,7 @@ export default class Gameboard {
 		return this.#ships.length === 0 || this.#ships.every((s) => s.isSunk());
 	}
 
-	addShip(positionX, positionY, shipLength, direction) {
+	addShip(positionX, positionY, shipLength, isUp) {
 		const position = { x: positionX, y: positionY };
 
 		if (
@@ -42,13 +41,10 @@ export default class Gameboard {
 			return;
 		}
 
-		if (
-			direction === SHIP_DIRECTION.UP &&
-			this.#isPositionInsideBoard(position.y + shipLength)
-		) {
-			this.#addShip(position, shipLength, direction);
+		if (isUp && this.#isPositionInsideBoard(position.y + shipLength)) {
+			this.#addShip(position, shipLength, isUp);
 		} else if (this.#isPositionInsideBoard(position.x + shipLength)) {
-			this.#addShip(position, shipLength, direction);
+			this.#addShip(position, shipLength, isUp);
 		}
 	}
 
@@ -72,12 +68,11 @@ export default class Gameboard {
 	}
 
 	#testShipHit(ship, hitPosition) {
-		const isShipVertical = ship.direction === SHIP_DIRECTION.UP;
-		const shipAxis = isShipVertical ? ship.position.x : ship.position.y;
-		const shipSegment = isShipVertical ? ship.position.y : ship.position.x;
+		const shipAxis = ship.isUp ? ship.position.x : ship.position.y;
+		const shipSegment = ship.isUp ? ship.position.y : ship.position.x;
 		const shipSegmentEnd = shipSegment + ship.length;
-		const hitAxis = isShipVertical ? hitPosition.x : hitPosition.y;
-		const hitSegment = isShipVertical ? hitPosition.y : hitPosition.x;
+		const hitAxis = ship.isUp ? hitPosition.x : hitPosition.y;
+		const hitSegment = ship.isUp ? hitPosition.y : hitPosition.x;
 
 		if (
 			shipAxis === hitAxis &&
@@ -95,8 +90,8 @@ export default class Gameboard {
 		return position >= 0 && position < this.#boardSize;
 	}
 
-	#addShip(position, shipLength, direction) {
-		const ship = new Ship(position, shipLength, direction);
+	#addShip(position, shipLength, isUp) {
+		const ship = new Ship(position, shipLength, isUp);
 		if (!this.#isNearOrIntersectingWithShip(ship)) {
 			this.#ships.push(ship);
 		}
@@ -107,7 +102,7 @@ export default class Gameboard {
 	}
 
 	#isNearOrIntersecting(ship1, ship2) {
-		if (ship1.direction !== ship2.direction) {
+		if (ship1.isUp !== ship2.isUp) {
 			return this.#isNearOrIntersectingDifferentDirection(ship1, ship2);
 		} else {
 			return this.#isNearOrIntersectingSameDirection(ship1, ship2);
@@ -115,9 +110,8 @@ export default class Gameboard {
 	}
 
 	#isNearOrIntersectingDifferentDirection(ship1, ship2) {
-		const isShip1Vertical = ship1.direction === SHIP_DIRECTION.UP;
-		const vertical = isShip1Vertical ? ship1 : ship2;
-		const horizontal = isShip1Vertical ? ship2 : ship1;
+		const vertical = ship1.isUp ? ship1 : ship2;
+		const horizontal = ship1.isUp ? ship2 : ship1;
 
 		const horizontalLeft = horizontal.position.x - vertical.position.x;
 		const horizontalEnd = horizontal.position.x + horizontal.length - 1;
@@ -139,11 +133,10 @@ export default class Gameboard {
 	}
 
 	#isNearOrIntersectingSameDirection(ship1, ship2) {
-		const isVertical = ship1.direction === SHIP_DIRECTION.UP;
-		const ship1Axis = isVertical ? ship1.position.x : ship1.position.y;
-		const ship2Axis = isVertical ? ship2.position.x : ship2.position.y;
-		const ship1Segment = isVertical ? ship1.position.y : ship1.position.x;
-		const ship2Segment = isVertical ? ship2.position.y : ship2.position.x;
+		const ship1Axis = ship1.isUp ? ship1.position.x : ship1.position.y;
+		const ship2Axis = ship1.isUp ? ship2.position.x : ship2.position.y;
+		const ship1Segment = ship1.isUp ? ship1.position.y : ship1.position.x;
+		const ship2Segment = ship1.isUp ? ship2.position.y : ship2.position.x;
 
 		const axisDistance = Math.abs(ship1Axis - ship2Axis);
 

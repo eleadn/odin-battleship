@@ -68,21 +68,6 @@ export default class GameboardView extends ViewBase {
 		this.#board = board;
 	}
 
-	unRender() {
-		EventBus.unlisten("ui:shipPlacementChanged", this.#onUpdateShipBoard);
-	}
-
-	renderContent() {
-		const container = document.createElement("div");
-		container.id = "gameboardView";
-
-		this.#renderTitle(container);
-		this.#renderOpponentBoard(container);
-		this.#renderFriendlyBoard(container);
-
-		this.root.appendChild(container);
-	}
-
 	#updateShipBoard(ship) {
 		const axis = ship.isUp ? ship.position.x : ship.position.y;
 		const segmentStart = ship.isUp ? ship.position.y : ship.position.x;
@@ -110,6 +95,21 @@ export default class GameboardView extends ViewBase {
 				}
 			}
 		}
+	}
+
+	unRender() {
+		EventBus.unlisten("ui:shipPlacementChanged", this.#onUpdateShipBoard);
+	}
+
+	renderContent() {
+		const container = document.createElement("div");
+		container.id = "gameboardView";
+
+		this.#renderTitle(container);
+		this.#renderOpponentBoard(container);
+		this.#renderFriendlyBoard(container);
+
+		this.root.appendChild(container);
 	}
 
 	updateShipBoard(shipsArray) {

@@ -20,7 +20,7 @@
 	grid-template-rows: repeat(10, 30px);
 }
 
-.board > .cell-oponent {
+.board > .cell-opponent {
 	border-top: none;
 	border-bottom: 1px solid red;
 	border-left: none;
@@ -28,7 +28,7 @@
 	background-color: white;
 }
 
-.board > .cell-oponent.cell-top {
+.board > .cell-opponent.cell-top {
 	border-top: 1px solid red;
 }
 

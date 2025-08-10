@@ -79,7 +79,7 @@ export default class Gameboard {
 			shipSegment <= hitSegment &&
 			hitSegment <= shipSegmentEnd
 		) {
-			ship.hit();
+			ship.hit(hitSegment - shipSegment);
 			return true;
 		}
 

@@ -6,7 +6,7 @@ export default class Ship {
 
 	constructor(position, length, isUp) {
 		this.#length = length;
-		this.#hits = 0;
+		this.#hits = [];
 		this.#position = position;
 		this.#isUp = isUp;
 	}
@@ -19,6 +19,10 @@ export default class Ship {
 		return this.#hits;
 	}
 
+	get hitCount() {
+		return this.#hits.length;
+	}
+
 	get position() {
 		return this.#position;
 	}
@@ -27,11 +31,11 @@ export default class Ship {
 		return this.#isUp;
 	}
 
-	hit() {
-		++this.#hits;
+	hit(hitIndex) {
+		this.#hits.push(hitIndex);
 	}
 
 	isSunk() {
-		return this.#hits >= this.#length;
+		return this.hitCount >= this.#length;
 	}
 }

@@ -2,11 +2,13 @@ import ViewBase from "./view-base";
 
 export default class GameboardView extends ViewBase {
 	#boardSize;
+	#shipArray;
 
-	constructor(root, boardSize) {
+	constructor(root, boardSize, shipArray) {
 		super(root);
 
 		this.#boardSize = boardSize;
+		this.#shipArray = shipArray;
 	}
 
 	#renderTitle(container) {
@@ -51,6 +53,17 @@ export default class GameboardView extends ViewBase {
 				}
 				if (i === 0) {
 					cell.classList.add("cell-top");
+				}
+
+				const status = this.#shipArray.find(
+					(a) =>
+						j >= a.start.x &&
+						j <= a.end.x &&
+						i >= a.start.y &&
+						i <= a.end.y
+				);
+				if (status) {
+					cell.textContent = "X";
 				}
 
 				board.appendChild(cell);

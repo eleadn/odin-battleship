@@ -12,6 +12,10 @@ export default class Gameboard {
 		this.#boardSize = boardSize;
 	}
 
+	get ships() {
+		return this.#ships;
+	}
+
 	get totalShips() {
 		return this.#ships.length;
 	}
@@ -20,8 +24,8 @@ export default class Gameboard {
 		return this.#attacks.length;
 	}
 
-	get missedAttacks() {
-		return this.#attacks.filter((a) => !a.hit);
+	get attacks() {
+		return this.#attacks;
 	}
 
 	get areAllShipSunk() {

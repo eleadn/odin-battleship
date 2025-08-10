@@ -15,10 +15,11 @@ export default class ScreenManager {
 		this.#currentView.render();
 	}
 
-	static navigateToGameboard() {
+	static navigateToGameboard(shipArray) {
 		this.#currentView = new GameboardView(
 			this.#rootElement,
-			configuration.getBoardSize()
+			configuration.getBoardSize(),
+			shipArray
 		);
 		this.#currentView.render();
 	}

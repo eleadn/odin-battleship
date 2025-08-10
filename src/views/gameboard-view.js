@@ -98,6 +98,8 @@ export default class GameboardView extends ViewBase {
 				(ind) => ind === i - segmentStart
 			);
 
+			shipElem.classList.remove(["ship-sunk", "ship-hit", "ship"]);
+
 			if (ship.isSunk) {
 				shipElem.classList.add("ship-sunk");
 			} else {

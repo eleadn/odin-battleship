@@ -10,16 +10,23 @@ export default class ScreenManager {
 		this.#rootElement = rootElement;
 	}
 
+	static #unRenderCurrentView() {
+		if (this.#currentView) {
+			this.#currentView.unRender();
+		}
+	}
+
 	static navigateToHome() {
+		this.#unRenderCurrentView();
 		this.#currentView = new HomeView(this.#rootElement);
 		this.#currentView.render();
 	}
 
-	static navigateToGameboard(shipArray) {
+	static navigateToGameboard() {
+		this.#unRenderCurrentView();
 		this.#currentView = new GameboardView(
 			this.#rootElement,
-			configuration.getBoardSize(),
-			shipArray
+			configuration.getBoardSize()
 		);
 		this.#currentView.render();
 	}

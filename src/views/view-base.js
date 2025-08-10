@@ -17,4 +17,6 @@ export default class ViewBase {
 		this.#root.innerHTML = "";
 		this.renderContent();
 	}
+
+	unRender() {}
 }

@@ -1,14 +1,19 @@
+import EventBus from "../event-bus/event-bus";
 import ViewBase from "./view-base";
 
 export default class GameboardView extends ViewBase {
 	#boardSize;
-	#shipArray;
+	#board;
 
-	constructor(root, boardSize, shipArray) {
+	#onUpdateShipBoard;
+
+	constructor(root, boardSize) {
 		super(root);
 
 		this.#boardSize = boardSize;
-		this.#shipArray = shipArray;
+
+		this.#onUpdateShipBoard = (ships) => this.updateShipBoard(ships);
+		EventBus.listen("ui:shipPlacementChanged", this.#onUpdateShipBoard);
 	}
 
 	#renderTitle(container) {
@@ -55,22 +60,16 @@ export default class GameboardView extends ViewBase {
 					cell.classList.add("cell-top");
 				}
 
-				const status = this.#shipArray.find(
-					(a) =>
-						j >= a.start.x &&
-						j <= a.end.x &&
-						i >= a.start.y &&
-						i <= a.end.y
-				);
-				if (status) {
-					cell.textContent = "X";
-				}
-
 				board.appendChild(cell);
 			}
 		}
 
 		container.appendChild(board);
+		this.#board = board;
+	}
+
+	unRender() {
+		EventBus.unlisten("ui:shipPlacementChanged", this.#onUpdateShipBoard);
 	}
 
 	renderContent() {
@@ -82,5 +81,29 @@ export default class GameboardView extends ViewBase {
 		this.#renderFriendlyBoard(container);
 
 		this.root.appendChild(container);
+	}
+
+	#updateShipBoard(ship) {
+		const isVertical = ship.start.x === ship.end.x;
+		const axis = isVertical ? ship.start.x : ship.start.y;
+		const segmentStart = isVertical ? ship.start.y : ship.start.x;
+		const segmentEnd = isVertical ? ship.end.y : ship.end.x;
+
+		for (let i = segmentStart; i <= segmentEnd; ++i) {
+			const x = isVertical ? axis : i;
+			const y = isVertical ? i : axis;
+			const index = x + y * this.#boardSize;
+			this.#board.children[index].textContent = "X";
+		}
+	}
+
+	updateShipBoard(shipsArray) {
+		if (!this.#board) {
+			return;
+		}
+
+		for (const s of shipsArray) {
+			this.#updateShipBoard(s);
+		}
 	}
 }

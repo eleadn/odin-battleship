@@ -22,7 +22,9 @@ export default class GameflowController {
 	onStartRequest() {
 		this.#placeShips(state.players["player1"].gameboard);
 		this.#placeShips(state.players["player2"].gameboard);
-		ScreenManager.navigateToGameboard(
+		ScreenManager.navigateToGameboard();
+		EventBus.emit(
+			"ui:shipPlacementChanged",
 			gameboardMapper.shipsToRaw(state.players["player1"].gameboard)
 		);
 	}

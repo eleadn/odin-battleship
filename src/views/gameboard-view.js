@@ -84,14 +84,13 @@ export default class GameboardView extends ViewBase {
 	}
 
 	#updateShipBoard(ship) {
-		const isVertical = ship.start.x === ship.end.x;
-		const axis = isVertical ? ship.start.x : ship.start.y;
-		const segmentStart = isVertical ? ship.start.y : ship.start.x;
-		const segmentEnd = isVertical ? ship.end.y : ship.end.x;
+		const axis = ship.isUp ? ship.position.x : ship.position.y;
+		const segmentStart = ship.isUp ? ship.position.y : ship.position.x;
+		const segmentEnd = segmentStart + ship.length;
 
-		for (let i = segmentStart; i <= segmentEnd; ++i) {
-			const x = isVertical ? axis : i;
-			const y = isVertical ? i : axis;
+		for (let i = segmentStart; i < segmentEnd; ++i) {
+			const x = ship.isUp ? axis : i;
+			const y = ship.isUp ? i : axis;
 			const index = x + y * this.#boardSize;
 			this.#board.children[index].textContent = "X";
 		}

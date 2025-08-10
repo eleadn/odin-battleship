@@ -5,7 +5,8 @@ export const gameboardMapper = {
 			const length = s.length;
 			const isUp = s.isUp;
 			const hitIndexes = s.hits;
-			return { position, length, isUp, hitIndexes };
+			const sunk = s.isSunk();
+			return { position, length, isUp, hitIndexes, sunk };
 		});
 	},
 };

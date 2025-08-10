@@ -97,10 +97,15 @@ export default class GameboardView extends ViewBase {
 			const isHit = ship.hitIndexes.some(
 				(ind) => ind === i - segmentStart
 			);
-			if (isHit) {
-				shipElem.classList.add("ship-hit");
+
+			if (ship.isSunk) {
+				shipElem.classList.add("ship-sunk");
 			} else {
-				shipElem.classList.add("ship");
+				if (isHit) {
+					shipElem.classList.add("ship-hit");
+				} else {
+					shipElem.classList.add("ship");
+				}
 			}
 		}
 	}

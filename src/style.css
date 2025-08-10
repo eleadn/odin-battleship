@@ -58,3 +58,8 @@
 	background-color: indianred;
 	border-color: darkred;
 }
+
+.board > .cell-friendly.ship-sunk {
+	background-color: dimgray;
+	border-color: black;
+}

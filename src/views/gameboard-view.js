@@ -167,7 +167,7 @@ export default class GameboardView extends ViewBase {
 
 		cell.classList.remove(["attack-hit", "attack-fail"]);
 
-		if (attack.ship.sunk) {
+		if (attack.ship && attack.ship.sunk) {
 			this.#sinkOpponentShip(
 				attack.ship.position,
 				attack.ship.length,

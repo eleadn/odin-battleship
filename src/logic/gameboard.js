@@ -41,9 +41,9 @@ export default class Gameboard {
 			return;
 		}
 
-		if (isUp && this.#isPositionInsideBoard(position.y + shipLength)) {
+		if (isUp && this.#isPositionInsideBoard(position.y + shipLength - 1)) {
 			this.#addShip(position, shipLength, isUp);
-		} else if (this.#isPositionInsideBoard(position.x + shipLength)) {
+		} else if (this.#isPositionInsideBoard(position.x + shipLength - 1)) {
 			this.#addShip(position, shipLength, isUp);
 		}
 	}
@@ -71,7 +71,7 @@ export default class Gameboard {
 	#testShipHit(ship, hitPosition) {
 		const shipAxis = ship.isUp ? ship.position.x : ship.position.y;
 		const shipSegment = ship.isUp ? ship.position.y : ship.position.x;
-		const shipSegmentEnd = shipSegment + ship.length;
+		const shipSegmentEnd = shipSegment + ship.length - 1;
 		const hitAxis = ship.isUp ? hitPosition.x : hitPosition.y;
 		const hitSegment = ship.isUp ? hitPosition.y : hitPosition.x;
 

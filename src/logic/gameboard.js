@@ -60,11 +60,12 @@ export default class Gameboard {
 					a.position.x === position.x && a.position.y === position.y
 			)
 		) {
-			return;
+			return false;
 		}
 
 		const isHit = this.#ships.some((s) => this.#testShipHit(s, position));
 		this.#attacks.push({ position: position, hit: isHit });
+		return true;
 	}
 
 	#testShipHit(ship, hitPosition) {

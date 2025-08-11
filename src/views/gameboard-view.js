@@ -4,8 +4,10 @@ import ViewBase from "./view-base";
 export default class GameboardView extends ViewBase {
 	#boardSize;
 	#board;
+	#opponentBoard;
 
 	#onUpdateShipBoard;
+	#onReceiveAttack;
 
 	constructor(root, boardSize) {
 		super(root);
@@ -13,7 +15,13 @@ export default class GameboardView extends ViewBase {
 		this.#boardSize = boardSize;
 
 		this.#onUpdateShipBoard = (ships) => this.updateShipBoard(ships);
-		EventBus.listen("ui:shipPlacementChanged", this.#onUpdateShipBoard);
+		this.#onReceiveAttack = (attacks) => this.receiveAttack(attacks);
+		EventBus.listen("game:shipPlacementChanged", this.#onUpdateShipBoard);
+		EventBus.listen("game:opponentReceiveAttack", this.#onReceiveAttack);
+	}
+
+	#onOpponentCellClick(position) {
+		EventBus.emit("ui:opponentCellClicked", position);
 	}
 
 	#renderTitle(container) {
@@ -30,6 +38,7 @@ export default class GameboardView extends ViewBase {
 		for (let i = 0; i < this.#boardSize; ++i) {
 			for (let j = 0; j < this.#boardSize; ++j) {
 				const cell = document.createElement("button");
+				cell.title = "cell";
 				cell.classList.add("cell-opponent");
 				if (j === 0) {
 					cell.classList.add("cell-left");
@@ -38,11 +47,18 @@ export default class GameboardView extends ViewBase {
 					cell.classList.add("cell-top");
 				}
 
+				cell.position = { x: j, y: i };
+
+				cell.addEventListener("click", () =>
+					this.#onOpponentCellClick(cell.position)
+				);
+
 				board.appendChild(cell);
 			}
 		}
 
 		container.appendChild(board);
+		this.#opponentBoard = board;
 	}
 
 	#renderFriendlyBoard(container) {
@@ -98,7 +114,8 @@ export default class GameboardView extends ViewBase {
 	}
 
 	unRender() {
-		EventBus.unlisten("ui:shipPlacementChanged", this.#onUpdateShipBoard);
+		EventBus.unlisten("game:shipPlacementChanged", this.#onUpdateShipBoard);
+		EventBus.unlisten("game:opponentReceiveAttack", this.#onReceiveAttack);
 	}
 
 	renderContent() {
@@ -119,6 +136,25 @@ export default class GameboardView extends ViewBase {
 
 		for (const s of shipsArray) {
 			this.#updateShipBoard(s);
+		}
+	}
+
+	receiveAttack(attack) {
+		if (!this.#opponentBoard) {
+			return;
+		}
+
+		const x = attack.position.x;
+		const y = attack.position.y;
+		const index = x + y * this.#boardSize;
+		const cell = this.#opponentBoard.children[index];
+
+		cell.classList.remove(["attack-hit", "attack-fail"]);
+
+		if (attack.hit) {
+			cell.classList.add("attack-hit");
+		} else {
+			cell.classList.add("attack-fail");
 		}
 	}
 }

@@ -9,4 +9,11 @@ export const gameboardMapper = {
 			return { position, length, isUp, hitIndexes, sunk };
 		});
 	},
+
+	attackToRaw: (gameboard, position) => {
+		const attack = gameboard.attacks.find(
+			(a) => a.position.x === position.x && a.position.y === position.y
+		);
+		return { position, hit: attack.hit };
+	},
 };

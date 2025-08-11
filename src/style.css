@@ -36,6 +36,16 @@
 	border-left: 1px solid red;
 }
 
+.board > .cell-opponent.attack-hit {
+	background-color: indianred;
+	border-color: darkred;
+}
+
+.board > .cell-opponent.attack-fail {
+	background-color: dimgray;
+	border-color: black;
+}
+
 .board > .cell-friendly {
 	border-bottom: 1px solid black;
 	border-right: 1px solid black;

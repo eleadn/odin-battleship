@@ -167,18 +167,18 @@ export default class GameboardView extends ViewBase {
 
 		cell.classList.remove(["attack-hit", "attack-fail"]);
 
-		if (attack.ship && attack.ship.sunk) {
-			this.#sinkOpponentShip(
-				attack.ship.position,
-				attack.ship.length,
-				attack.ship.isUp
-			);
-		} else {
-			if (attack.hit) {
-				cell.classList.add("attack-hit");
+		if (attack.hit) {
+			if (attack.ship.sunk) {
+				this.#sinkOpponentShip(
+					attack.ship.position,
+					attack.ship.length,
+					attack.ship.isUp
+				);
 			} else {
-				cell.classList.add("attack-fail");
+				cell.classList.add("attack-hit");
 			}
+		} else {
+			cell.classList.add("attack-fail");
 		}
 	}
 }

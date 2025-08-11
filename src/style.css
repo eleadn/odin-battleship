@@ -41,6 +41,11 @@
 	border-color: darkred;
 }
 
+.board > .cell-opponent.attack-sunk {
+	background-color: darkred;
+	border-color: darkred;
+}
+
 .board > .cell-opponent.attack-fail {
 	background-color: dimgray;
 	border-color: black;

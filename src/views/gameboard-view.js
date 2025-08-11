@@ -113,6 +113,22 @@ export default class GameboardView extends ViewBase {
 		}
 	}
 
+	#sinkOpponentShip(position, length, isUp) {
+		const axis = isUp ? position.x : position.y;
+		const segmentStart = isUp ? position.y : position.x;
+		const segmentEnd = segmentStart + length;
+
+		for (let i = segmentStart; i < segmentEnd; ++i) {
+			const x = isUp ? axis : i;
+			const y = isUp ? i : axis;
+			const index = x + y * this.#boardSize;
+			const cell = this.#opponentBoard.children[index];
+
+			cell.classList.remove(["attack-hit", "attack-fail"]);
+			cell.classList.add("attack-sunk");
+		}
+	}
+
 	unRender() {
 		EventBus.unlisten("game:shipPlacementChanged", this.#onUpdateShipBoard);
 		EventBus.unlisten("game:opponentReceiveAttack", this.#onReceiveAttack);
@@ -151,10 +167,18 @@ export default class GameboardView extends ViewBase {
 
 		cell.classList.remove(["attack-hit", "attack-fail"]);
 
-		if (attack.hit) {
-			cell.classList.add("attack-hit");
+		if (attack.ship.sunk) {
+			this.#sinkOpponentShip(
+				attack.ship.position,
+				attack.ship.length,
+				attack.ship.isUp
+			);
 		} else {
-			cell.classList.add("attack-fail");
+			if (attack.hit) {
+				cell.classList.add("attack-hit");
+			} else {
+				cell.classList.add("attack-fail");
+			}
 		}
 	}
 }

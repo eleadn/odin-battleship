@@ -63,8 +63,15 @@ export default class Gameboard {
 			return false;
 		}
 
-		const isHit = this.#ships.some((s) => this.#testShipHit(s, position));
-		this.#attacks.push({ position: position, hit: isHit });
+		const hittedShip = this.#ships.find((s) =>
+			this.#testShipHit(s, position)
+		);
+		const isHit = hittedShip ? true : false;
+		this.#attacks.push({
+			position: position,
+			hit: isHit,
+			ship: hittedShip,
+		});
 		return true;
 	}
 

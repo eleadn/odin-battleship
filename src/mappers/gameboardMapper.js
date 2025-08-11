@@ -14,6 +14,18 @@ export const gameboardMapper = {
 		const attack = gameboard.attacks.find(
 			(a) => a.position.x === position.x && a.position.y === position.y
 		);
-		return { position, hit: attack.hit };
+		let ship = null;
+
+		if (attack.ship) {
+			const sunk = attack.ship.isSunk();
+			const shipPosition = {
+				x: attack.ship.position.x,
+				y: attack.ship.position.y,
+			};
+			const length = attack.ship.length;
+			const isUp = attack.ship.isUp;
+			ship = { sunk, position: shipPosition, length, isUp };
+		}
+		return { position, hit: attack.hit, ship };
 	},
 };

@@ -5,9 +5,11 @@ export default class GameboardView extends ViewBase {
 	#boardSize;
 	#board;
 	#opponentBoard;
+	#title;
 
 	#onUpdateShipBoard;
 	#onReceiveAttack;
+	#onStartTurn;
 
 	constructor(root, boardSize) {
 		super(root);
@@ -16,8 +18,10 @@ export default class GameboardView extends ViewBase {
 
 		this.#onUpdateShipBoard = (ships) => this.updateShipBoard(ships);
 		this.#onReceiveAttack = (attacks) => this.receiveAttack(attacks);
+		this.#onStartTurn = (playerName) => this.updateTitle(playerName);
 		EventBus.listen("game:shipPlacementChanged", this.#onUpdateShipBoard);
 		EventBus.listen("game:opponentReceiveAttack", this.#onReceiveAttack);
+		EventBus.listen("game:startTurn", this.#onStartTurn);
 	}
 
 	#onOpponentCellClick(position) {
@@ -29,6 +33,7 @@ export default class GameboardView extends ViewBase {
 		title.textContent = "{CurrentPlayer} turn";
 
 		container.appendChild(title);
+		this.#title = title;
 	}
 
 	#renderOpponentBoard(container) {
@@ -132,6 +137,7 @@ export default class GameboardView extends ViewBase {
 	unRender() {
 		EventBus.unlisten("game:shipPlacementChanged", this.#onUpdateShipBoard);
 		EventBus.unlisten("game:opponentReceiveAttack", this.#onReceiveAttack);
+		EventBus.unlisten("game:startTurn", this.#onStartTurn);
 	}
 
 	renderContent() {
@@ -180,5 +186,13 @@ export default class GameboardView extends ViewBase {
 		} else {
 			cell.classList.add("attack-fail");
 		}
+	}
+
+	updateTitle(playerName) {
+		if (!this.#title) {
+			return;
+		}
+
+		this.#title.textContent = `${playerName} turn`;
 	}
 }

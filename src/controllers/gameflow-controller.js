@@ -26,5 +26,6 @@ export default class GameflowController {
 			"game:shipPlacementChanged",
 			gameboardMapper.shipsToRaw(state.players["player1"].gameboard)
 		);
+		EventBus.emit("game:startTurn", state.players["player1"].name);
 	}
 }

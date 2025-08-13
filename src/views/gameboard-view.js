@@ -12,6 +12,8 @@ export default class GameboardView extends ViewBase {
 	#onPlayerReceiveAttack;
 	#onStartTurn;
 
+	#onOpponentCellClick;
+
 	constructor(root, boardSize) {
 		super(root);
 
@@ -34,10 +36,16 @@ export default class GameboardView extends ViewBase {
 			this.#onPlayerReceiveAttack
 		);
 		EventBus.listen("game:startTurn", this.#onStartTurn);
+
+		this.#onOpponentCellClick = (cell) => this.#opponentCellClick(cell);
 	}
 
-	#onOpponentCellClick(position) {
-		EventBus.emit("ui:opponentCellClicked", position);
+	#opponentCellClick(event) {
+		EventBus.emit("ui:opponentCellClicked", event.currentTarget.position);
+		event.currentTarget.removeEventListener(
+			"click",
+			this.#onOpponentCellClick
+		);
 	}
 
 	#renderTitle(container) {
@@ -65,9 +73,7 @@ export default class GameboardView extends ViewBase {
 
 				cell.position = { x: j, y: i };
 
-				cell.addEventListener("click", () =>
-					this.#onOpponentCellClick(cell.position)
-				);
+				cell.addEventListener("click", this.#onOpponentCellClick);
 
 				board.appendChild(cell);
 			}

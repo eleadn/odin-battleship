@@ -21,5 +21,5 @@ const players = {
 
 export const state = {
 	players,
-	currentPlayer: players["player1"],
+	currentPlayer: "player1",
 };

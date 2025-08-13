@@ -8,12 +8,12 @@ export default class BotTurnController {
 	}
 
 	onPlayBotTurn() {
-		setTimeout(() => this.#playBotTurn(), 2000);
+		setTimeout(() => this.#playBotTurn(), 10);
 	}
 
 	#playBotTurn() {
 		const possibleAttacks =
-			state.currentPlayer.gameboard.getPossibleAttacks();
+			state.players[state.currentPlayer].gameboard.getPossibleAttacks();
 		const attackIndex = Math.floor(Math.random() * possibleAttacks.length);
 		const attack = possibleAttacks[attackIndex];
 		state.players["player1"].gameboard.receiveAttack(attack.x, attack.y);

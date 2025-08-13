@@ -10,7 +10,7 @@ export default class GameEventsController {
 	}
 
 	onOpponentCellClicked(position) {
-		if (state.currentPlayer.type === playerType.bot) {
+		if (state.players[state.currentPlayer].type === playerType.bot) {
 			return;
 		}
 

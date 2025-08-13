@@ -26,29 +26,35 @@ export default class GameflowController {
 		ScreenManager.navigateToGameboard();
 
 		const boardToRender =
-			state.currentPlayer.type === "human"
-				? state.currentPlayer.gameboard
+			state.players[state.currentPlayer].type === "human"
+				? state.players[state.currentPlayer].gameboard
 				: state.players["player1"].gameboard;
 		EventBus.emit(
 			"game:shipPlacementChanged",
 			gameboardMapper.shipsToRaw(boardToRender)
 		);
-		EventBus.emit("game:startTurn", state.currentPlayer.name);
+		EventBus.emit(
+			"game:startTurn",
+			state.players[state.currentPlayer].name
+		);
 	}
 
 	onTurnStart() {
-		if (state.currentPlayer.type === playerType.bot) {
+		if (state.players[state.currentPlayer].type === playerType.bot) {
 			EventBus.emit("game:playBotTurn");
 		}
 	}
 
 	onSwitchTurn() {
-		if (state.currentPlayer.type === playerType.bot) {
-			state.currentPlayer = state.players["player1"];
+		if (state.currentPlayer === "player1") {
+			state.currentPlayer = "player2";
 		} else {
-			state.currentPlayer = state.players["player2"];
+			state.currentPlayer = "player1";
 		}
 
-		EventBus.emit("game:startTurn", state.currentPlayer.name);
+		EventBus.emit(
+			"game:startTurn",
+			state.players[state.currentPlayer].name
+		);
 	}
 }

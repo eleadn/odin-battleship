@@ -8,7 +8,8 @@ export default class GameboardView extends ViewBase {
 	#title;
 
 	#onUpdateShipBoard;
-	#onReceiveAttack;
+	#onOpponentReceiveAttack;
+	#onPlayerReceiveAttack;
 	#onStartTurn;
 
 	constructor(root, boardSize) {
@@ -17,10 +18,21 @@ export default class GameboardView extends ViewBase {
 		this.#boardSize = boardSize;
 
 		this.#onUpdateShipBoard = (ships) => this.updateShipBoard(ships);
-		this.#onReceiveAttack = (attacks) => this.receiveAttack(attacks);
+		this.#onOpponentReceiveAttack = (attacks) =>
+			this.onOpponentReceiveAttack(attacks);
+		this.#onPlayerReceiveAttack = (attack) =>
+			this.onPlayerReceiveAttack(attack);
 		this.#onStartTurn = (playerName) => this.updateTitle(playerName);
+
 		EventBus.listen("game:shipPlacementChanged", this.#onUpdateShipBoard);
-		EventBus.listen("game:opponentReceiveAttack", this.#onReceiveAttack);
+		EventBus.listen(
+			"game:opponentReceiveAttack",
+			this.#onOpponentReceiveAttack
+		);
+		EventBus.listen(
+			"game:playerReceiveAttack",
+			this.#onPlayerReceiveAttack
+		);
 		EventBus.listen("game:startTurn", this.#onStartTurn);
 	}
 
@@ -43,7 +55,6 @@ export default class GameboardView extends ViewBase {
 		for (let i = 0; i < this.#boardSize; ++i) {
 			for (let j = 0; j < this.#boardSize; ++j) {
 				const cell = document.createElement("button");
-				cell.role = "none";
 				cell.classList.add("cell-opponent");
 				if (j === 0) {
 					cell.classList.add("cell-left");
@@ -136,7 +147,14 @@ export default class GameboardView extends ViewBase {
 
 	unRender() {
 		EventBus.unlisten("game:shipPlacementChanged", this.#onUpdateShipBoard);
-		EventBus.unlisten("game:opponentReceiveAttack", this.#onReceiveAttack);
+		EventBus.unlisten(
+			"game:opponentReceiveAttack",
+			this.#onOpponentReceiveAttack
+		);
+		EventBus.unlisten(
+			"game:playerReceiveAttack",
+			this.#onPlayerReceiveAttack
+		);
 		EventBus.unlisten("game:startTurn", this.#onStartTurn);
 	}
 
@@ -161,7 +179,7 @@ export default class GameboardView extends ViewBase {
 		}
 	}
 
-	receiveAttack(attack) {
+	onOpponentReceiveAttack(attack) {
 		if (!this.#opponentBoard) {
 			return;
 		}
@@ -180,6 +198,28 @@ export default class GameboardView extends ViewBase {
 					attack.ship.length,
 					attack.ship.isUp
 				);
+			} else {
+				cell.classList.add("attack-hit");
+			}
+		} else {
+			cell.classList.add("attack-fail");
+		}
+	}
+
+	onPlayerReceiveAttack(attack) {
+		if (!this.#board) {
+			return;
+		}
+
+		const x = attack.position.x;
+		const y = attack.position.y;
+		const index = x + y * this.#boardSize;
+		const cell = this.#board.children[index];
+
+		cell.classList.remove(["attack-hit", "attack-fail"]);
+
+		if (attack.hit) {
+			if (attack.ship.sunk) {
 			} else {
 				cell.classList.add("attack-hit");
 			}

@@ -48,6 +48,22 @@ export default class Gameboard {
 		}
 	}
 
+	getPossibleAttacks() {
+		const possibleAttacks = [];
+		for (let i = 0; i < this.#boardSize; ++i) {
+			for (let j = 0; j < this.#boardSize; ++j) {
+				if (
+					!this.#attacks.some(
+						(a) => a.position.x === j && a.position.y === i
+					)
+				) {
+					possibleAttacks.push({ x: j, y: i });
+				}
+			}
+		}
+		return possibleAttacks;
+	}
+
 	receiveAttack(positionX, positionY) {
 		const position = { x: positionX, y: positionY };
 		if (

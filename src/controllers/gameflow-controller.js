@@ -2,11 +2,12 @@ import { configuration } from "../configuration/configuration";
 import EventBus from "../event-bus/event-bus";
 import { gameboardMapper } from "../mappers/gameboardMapper";
 import ScreenManager from "../screen-manager/screen-manager";
-import { state } from "../state/state";
+import { playerType, state } from "../state/state";
 
 export default class GameflowController {
 	constructor() {
 		EventBus.listen("game:startRequest", () => this.onStartRequest());
+		EventBus.listen("game:startTurn", (n) => this.onTurnStart(n));
 	}
 
 	#placeShips(gameboard) {
@@ -22,10 +23,21 @@ export default class GameflowController {
 		this.#placeShips(state.players["player1"].gameboard);
 		this.#placeShips(state.players["player2"].gameboard);
 		ScreenManager.navigateToGameboard();
+
+		const boardToRender =
+			state.currentPlayer.type === "human"
+				? state.currentPlayer.gameboard
+				: state.players["player1"].gameboard;
 		EventBus.emit(
 			"game:shipPlacementChanged",
-			gameboardMapper.shipsToRaw(state.players["player1"].gameboard)
+			gameboardMapper.shipsToRaw(boardToRender)
 		);
-		EventBus.emit("game:startTurn", state.players["player1"].name);
+		EventBus.emit("game:startTurn", state.currentPlayer.name);
+	}
+
+	onTurnStart() {
+		if (state.currentPlayer.type === playerType.bot) {
+			EventBus.emit("game:playBotTurn");
+		}
 	}
 }

@@ -1,6 +1,6 @@
 import EventBus from "../event-bus/event-bus";
 import { gameboardMapper } from "../mappers/gameboardMapper";
-import { state } from "../state/state";
+import { playerType, state } from "../state/state";
 
 export default class GameEventsController {
 	constructor() {
@@ -10,6 +10,10 @@ export default class GameEventsController {
 	}
 
 	onOpponentCellClicked(position) {
+		if (state.currentPlayer.type === playerType.bot) {
+			return;
+		}
+
 		const result = state.players["player2"].gameboard.receiveAttack(
 			position.x,
 			position.y

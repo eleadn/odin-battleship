@@ -69,12 +69,16 @@
 	border-color: blue;
 }
 
-.board > .cell-friendly.ship-hit {
+.board > .cell-friendly.attack-hit {
 	background-color: indianred;
 	border-color: darkred;
 }
 
-.board > .cell-friendly.ship-sunk {
+.board > .cell-friendly.attack-sunk {
 	background-color: dimgray;
 	border-color: black;
+}
+
+.board > .cell-friendly.attack-fail {
+	background-color: aquamarine;
 }

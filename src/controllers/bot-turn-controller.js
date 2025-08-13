@@ -13,7 +13,7 @@ export default class BotTurnController {
 
 	#playBotTurn() {
 		const possibleAttacks =
-			state.players[state.currentPlayer].gameboard.getPossibleAttacks();
+			state.players["player1"].gameboard.getPossibleAttacks();
 		const attackIndex = Math.floor(Math.random() * possibleAttacks.length);
 		const attack = possibleAttacks[attackIndex];
 		state.players["player1"].gameboard.receiveAttack(attack.x, attack.y);

@@ -64,6 +64,39 @@ export default class Gameboard {
 		return possibleAttacks;
 	}
 
+	getPossiblePositions(shipLength) {
+		const possiblePositions = [];
+		for (let i = 0; i < this.#boardSize; ++i) {
+			for (let j = 0; j < this.#boardSize; ++j) {
+				const position = { x: j, y: i };
+				const shipUp = new Ship(position, shipLength, true);
+				const shipSide = new Ship(position, shipLength, false);
+				if (
+					!this.#isNearOrIntersectingWithShip(shipUp) &&
+					this.#isPositionInsideBoard(position.y + shipLength - 1)
+				) {
+					possiblePositions.push({
+						position,
+						length: shipLength,
+						isUp: true,
+					});
+				}
+				if (
+					!this.#isNearOrIntersectingWithShip(shipSide) &&
+					this.#isPositionInsideBoard(position.x + shipLength - 1)
+				) {
+					possiblePositions.push({
+						position,
+						length: shipLength,
+						isUp: false,
+					});
+				}
+			}
+		}
+
+		return possiblePositions;
+	}
+
 	receiveAttack(positionX, positionY) {
 		const position = { x: positionX, y: positionY };
 		if (

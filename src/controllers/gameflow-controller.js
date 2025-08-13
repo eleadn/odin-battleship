@@ -12,13 +12,30 @@ export default class GameflowController {
 		EventBus.listen("game:endGame", () => this.onEndGame());
 	}
 
+	#placeShip(gameboard, shipLength) {
+		const possibilities = gameboard.getPossiblePositions(shipLength);
+
+		if (possibilities.length === 0) {
+			return;
+		}
+
+		const index = Math.floor(Math.random() * possibilities.length);
+		const ship = possibilities[index];
+		gameboard.addShip(
+			ship.position.x,
+			ship.position.y,
+			ship.length,
+			ship.isUp
+		);
+	}
+
 	#placeShips(gameboard) {
 		const ships = configuration.getShips();
-		gameboard.addShip(0, 0, ships["carrier"], true);
-		gameboard.addShip(2, 0, ships["battleship"], true);
-		gameboard.addShip(4, 0, ships["destroyer"], true);
-		gameboard.addShip(6, 0, ships["submarine"], true);
-		gameboard.addShip(8, 0, ships["patrolBoat"], true);
+		this.#placeShip(gameboard, ships["carrier"]);
+		this.#placeShip(gameboard, ships["battleship"]);
+		this.#placeShip(gameboard, ships["destroyer"]);
+		this.#placeShip(gameboard, ships["submarine"]);
+		this.#placeShip(gameboard, ships["patrolBoat"]);
 	}
 
 	onStartRequest() {

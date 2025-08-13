@@ -8,7 +8,7 @@ export default class BotTurnController {
 	}
 
 	onPlayBotTurn() {
-		setTimeout(() => this.#playBotTurn(), 10);
+		setTimeout(() => this.#playBotTurn(), 500);
 	}
 
 	#playBotTurn() {

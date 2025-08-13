@@ -8,6 +8,7 @@ export default class GameflowController {
 	constructor() {
 		EventBus.listen("game:startRequest", () => this.onStartRequest());
 		EventBus.listen("game:startTurn", (n) => this.onTurnStart(n));
+		EventBus.listen("game:switchTurn", () => this.onSwitchTurn());
 	}
 
 	#placeShips(gameboard) {
@@ -39,5 +40,15 @@ export default class GameflowController {
 		if (state.currentPlayer.type === playerType.bot) {
 			EventBus.emit("game:playBotTurn");
 		}
+	}
+
+	onSwitchTurn() {
+		if (state.currentPlayer.type === playerType.bot) {
+			state.currentPlayer = state.players["player1"];
+		} else {
+			state.currentPlayer = state.players["player2"];
+		}
+
+		EventBus.emit("game:startTurn", state.currentPlayer.name);
 	}
 }

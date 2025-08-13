@@ -4,10 +4,14 @@ import { state } from "../state/state";
 
 export default class BotTurnController {
 	constructor() {
-		EventBus.listen("game:playBotTurn", this.onPlayBotTurn);
+		EventBus.listen("game:playBotTurn", () => this.onPlayBotTurn());
 	}
 
 	onPlayBotTurn() {
+		setTimeout(() => this.#playBotTurn(), 2000);
+	}
+
+	#playBotTurn() {
 		const possibleAttacks =
 			state.currentPlayer.gameboard.getPossibleAttacks();
 		const attackIndex = Math.floor(Math.random() * possibleAttacks.length);
@@ -21,5 +25,7 @@ export default class BotTurnController {
 				attack
 			)
 		);
+
+		EventBus.emit("game:switchTurn");
 	}
 }

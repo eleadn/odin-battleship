@@ -14,19 +14,19 @@ export default class GameEventsController {
 			return;
 		}
 
-		const result = state.players["player2"].gameboard.receiveAttack(
+		state.players["player2"].gameboard.receiveAttack(
 			position.x,
 			position.y
 		);
 
-		if (result) {
-			EventBus.emit(
-				"game:opponentReceiveAttack",
-				gameboardMapper.attackToRaw(
-					state.players["player2"].gameboard,
-					position
-				)
-			);
-		}
+		EventBus.emit(
+			"game:opponentReceiveAttack",
+			gameboardMapper.attackToRaw(
+				state.players["player2"].gameboard,
+				position
+			)
+		);
+
+		EventBus.emit("game:switchTurn");
 	}
 }

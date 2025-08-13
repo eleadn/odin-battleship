@@ -20,8 +20,8 @@ export default class GameboardView extends ViewBase {
 		this.#boardSize = boardSize;
 
 		this.#onUpdateShipBoard = (ships) => this.updateShipBoard(ships);
-		this.#onOpponentReceiveAttack = (attacks) =>
-			this.onOpponentReceiveAttack(attacks);
+		this.#onOpponentReceiveAttack = (attacks, cell) =>
+			this.onOpponentReceiveAttack(attacks, cell);
 		this.#onPlayerReceiveAttack = (attack) =>
 			this.onPlayerReceiveAttack(attack);
 		this.#onStartTurn = (playerName) => this.updateTitle(playerName);

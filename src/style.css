@@ -75,7 +75,7 @@
 }
 
 .board > .cell-friendly.attack-sunk {
-	background-color: dimgray;
+	background-color: #333333;
 	border-color: black;
 }
 

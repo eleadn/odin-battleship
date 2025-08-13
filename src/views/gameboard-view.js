@@ -135,7 +135,7 @@ export default class GameboardView extends ViewBase {
 		}
 	}
 
-	#sinkOpponentShip(position, length, isUp) {
+	#sinkShip(board, position, length, isUp) {
 		const axis = isUp ? position.x : position.y;
 		const segmentStart = isUp ? position.y : position.x;
 		const segmentEnd = segmentStart + length;
@@ -144,10 +144,38 @@ export default class GameboardView extends ViewBase {
 			const x = isUp ? axis : i;
 			const y = isUp ? i : axis;
 			const index = x + y * this.#boardSize;
-			const cell = this.#opponentBoard.children[index];
+			const cell = board.children[index];
 
 			cell.classList.remove(["attack-hit", "attack-fail"]);
 			cell.classList.add("attack-sunk");
+		}
+	}
+
+	#receiveAttack(attack, board) {
+		if (!board) {
+			return;
+		}
+
+		const x = attack.position.x;
+		const y = attack.position.y;
+		const index = x + y * this.#boardSize;
+		const cell = board.children[index];
+
+		cell.classList.remove(["attack-hit", "attack-fail"]);
+
+		if (attack.hit) {
+			if (attack.ship.sunk) {
+				this.#sinkShip(
+					board,
+					attack.ship.position,
+					attack.ship.length,
+					attack.ship.isUp
+				);
+			} else {
+				cell.classList.add("attack-hit");
+			}
+		} else {
+			cell.classList.add("attack-fail");
 		}
 	}
 
@@ -186,52 +214,11 @@ export default class GameboardView extends ViewBase {
 	}
 
 	onOpponentReceiveAttack(attack) {
-		if (!this.#opponentBoard) {
-			return;
-		}
-
-		const x = attack.position.x;
-		const y = attack.position.y;
-		const index = x + y * this.#boardSize;
-		const cell = this.#opponentBoard.children[index];
-
-		cell.classList.remove(["attack-hit", "attack-fail"]);
-
-		if (attack.hit) {
-			if (attack.ship.sunk) {
-				this.#sinkOpponentShip(
-					attack.ship.position,
-					attack.ship.length,
-					attack.ship.isUp
-				);
-			} else {
-				cell.classList.add("attack-hit");
-			}
-		} else {
-			cell.classList.add("attack-fail");
-		}
+		this.#receiveAttack(attack, this.#opponentBoard);
 	}
 
 	onPlayerReceiveAttack(attack) {
-		if (!this.#board) {
-			return;
-		}
-
-		const x = attack.position.x;
-		const y = attack.position.y;
-		const index = x + y * this.#boardSize;
-		const cell = this.#board.children[index];
-
-		cell.classList.remove(["attack-hit", "attack-fail"]);
-
-		if (attack.hit) {
-			if (attack.ship.sunk) {
-			} else {
-				cell.classList.add("attack-hit");
-			}
-		} else {
-			cell.classList.add("attack-fail");
-		}
+		this.#receiveAttack(attack, this.#board);
 	}
 
 	updateTitle(playerName) {

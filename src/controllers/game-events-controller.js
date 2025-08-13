@@ -27,6 +27,10 @@ export default class GameEventsController {
 			)
 		);
 
-		EventBus.emit("game:switchTurn");
+		if (state.players["player2"].gameboard.areAllShipSunk) {
+			EventBus.emit("game:endGame");
+		} else {
+			EventBus.emit("game:switchTurn");
+		}
 	}
 }

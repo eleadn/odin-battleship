@@ -26,6 +26,10 @@ export default class BotTurnController {
 			)
 		);
 
-		EventBus.emit("game:switchTurn");
+		if (state.players["player1"].gameboard.areAllShipSunk) {
+			EventBus.emit("game:endGame");
+		} else {
+			EventBus.emit("game:switchTurn");
+		}
 	}
 }

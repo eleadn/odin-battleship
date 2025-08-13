@@ -23,3 +23,8 @@ export const state = {
 	players,
 	currentPlayer: "player1",
 };
+
+export const initState = function () {
+	players.player1.gameboard = new Gameboard(configuration.getBoardSize());
+	players.player2.gameboard = new Gameboard(configuration.getBoardSize());
+};

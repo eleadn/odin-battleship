@@ -2,13 +2,14 @@ import { configuration } from "../configuration/configuration";
 import EventBus from "../event-bus/event-bus";
 import { gameboardMapper } from "../mappers/gameboardMapper";
 import ScreenManager from "../screen-manager/screen-manager";
-import { playerType, state } from "../state/state";
+import { initState, playerType, state } from "../state/state";
 
 export default class GameflowController {
 	constructor() {
 		EventBus.listen("game:startRequest", () => this.onStartRequest());
 		EventBus.listen("game:startTurn", (n) => this.onTurnStart(n));
 		EventBus.listen("game:switchTurn", () => this.onSwitchTurn());
+		EventBus.listen("game:endGame", () => this.onEndGame());
 	}
 
 	#placeShips(gameboard) {
@@ -21,6 +22,8 @@ export default class GameflowController {
 	}
 
 	onStartRequest() {
+		initState();
+
 		this.#placeShips(state.players["player1"].gameboard);
 		this.#placeShips(state.players["player2"].gameboard);
 		ScreenManager.navigateToGameboard();
@@ -54,6 +57,12 @@ export default class GameflowController {
 
 		EventBus.emit(
 			"game:startTurn",
+			state.players[state.currentPlayer].name
+		);
+	}
+
+	onEndGame() {
+		ScreenManager.navigateToEndgame(
 			state.players[state.currentPlayer].name
 		);
 	}

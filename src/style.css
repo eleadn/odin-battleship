@@ -3,7 +3,8 @@
 }
 
 #homeView,
-#gameboardView {
+#gameboardView,
+#endgameView {
 	height: 100vh;
 	display: flex;
 

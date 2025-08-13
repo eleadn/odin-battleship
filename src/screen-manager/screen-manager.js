@@ -1,4 +1,5 @@
 import { configuration } from "../configuration/configuration";
+import EndgameView from "../views/endgame-view";
 import GameboardView from "../views/gameboard-view";
 import HomeView from "../views/home-view";
 
@@ -28,6 +29,12 @@ export default class ScreenManager {
 			this.#rootElement,
 			configuration.getBoardSize()
 		);
+		this.#currentView.render();
+	}
+
+	static navigateToEndgame(winnerName) {
+		this.#unRenderCurrentView();
+		this.#currentView = new EndgameView(this.#rootElement, winnerName);
 		this.#currentView.render();
 	}
 }

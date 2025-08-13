@@ -9,10 +9,12 @@ export default class GameEventsController {
 		);
 	}
 
-	onOpponentCellClicked(position) {
+	onOpponentCellClicked(cell) {
 		if (state.players[state.currentPlayer].type === playerType.bot) {
 			return;
 		}
+
+		const position = cell.position;
 
 		state.players["player2"].gameboard.receiveAttack(
 			position.x,
@@ -24,7 +26,8 @@ export default class GameEventsController {
 			gameboardMapper.attackToRaw(
 				state.players["player2"].gameboard,
 				position
-			)
+			),
+			cell
 		);
 
 		if (state.players["player2"].gameboard.areAllShipSunk) {

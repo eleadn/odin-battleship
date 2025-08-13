@@ -41,11 +41,7 @@ export default class GameboardView extends ViewBase {
 	}
 
 	#opponentCellClick(event) {
-		EventBus.emit("ui:opponentCellClicked", event.currentTarget.position);
-		event.currentTarget.removeEventListener(
-			"click",
-			this.#onOpponentCellClick
-		);
+		EventBus.emit("ui:opponentCellClicked", event.currentTarget);
 	}
 
 	#renderTitle(container) {
@@ -213,7 +209,8 @@ export default class GameboardView extends ViewBase {
 		}
 	}
 
-	onOpponentReceiveAttack(attack) {
+	onOpponentReceiveAttack(attack, cell) {
+		cell.removeEventListener("click", this.#onOpponentCellClick);
 		this.#receiveAttack(attack, this.#opponentBoard);
 	}
 
